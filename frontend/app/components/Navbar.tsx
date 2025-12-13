@@ -43,7 +43,7 @@ export default function Navbar() {
           </Link>
 
           {/* DESKTOP LINKS */}
-          <div className="hidden md:flex items-center space-x-8 text-lg font-normal">
+          <div className="hidden lg:flex items-center space-x-8 text-lg font-normal">
             <Link href="#contact" className="hover:text-white/70 transition">
               Contact
             </Link>
@@ -82,7 +82,7 @@ export default function Navbar() {
 
           {/* MOBILE MENU BUTTON */}
           <button
-            className="md:hidden text-3xl hover:text-white/80 transition"
+            className="lg:hidden text-3xl hover:text-white/80 transition"
             onClick={() => setMenuOpen(true)}
             aria-label="Open menu"
           >
@@ -93,7 +93,7 @@ export default function Navbar() {
 
       {/* MOBILE MENU OVERLAY */}
       {menuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
+        <div className="fixed inset-0 z-50 lg:hidden">
           {/* BACKDROP */}
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
 
