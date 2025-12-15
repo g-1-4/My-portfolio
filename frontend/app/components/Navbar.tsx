@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { HiMenu, HiX } from "react-icons/hi";
 import { Mail, Linkedin, Github } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (menuOpen) {
@@ -44,16 +46,57 @@ export default function Navbar() {
 
           {/* DESKTOP LINKS */}
           <div className="hidden lg:flex items-center space-x-8 text-lg font-normal">
-            <Link href="#contact" className="hover:text-white/70 transition">
+            <Link
+              href="/contact"
+              className={`relative transition hover:text-white/70
+                  ${pathname === "/contact" ? "text-white" : ""}
+                `}
+            >
               Contact
+              <span
+                className={`
+                  absolute -bottom-1 left-0 h-[2px] bg-white transition-all duration-300
+                  ${pathname === "/contact" ? "w-full" : "w-0"}
+                `}
+              />
             </Link>
 
-            <Link href="#projects" className="hover:text-white/70 transition">
+            <Link
+              href="/projects"
+              className={`relative transition hover:text-white/70
+                ${pathname === "/projects" ? "text-white" : ""}
+              `}
+            >
               Projects
+              <span
+                className={`
+                absolute -bottom-1 left-0 h-[2px] bg-white transition-all duration-300
+                ${pathname === "/projects" ? "w-full" : "w-0"}
+              `}
+              />
             </Link>
 
-            <Link href="#resume" className="hover:text-white/70 transition">
+            <Link
+              href="/resume"
+              className={`relative transition hover:text-white/70
+                ${
+                  pathname.startsWith("/resume") || pathname === "/courses"
+                    ? "text-white"
+                    : ""
+                }
+              `}
+            >
               Resume
+              <span
+                className={`
+                  absolute -bottom-1 left-0 h-[2px] bg-white transition-all duration-300
+                  ${
+                    pathname.startsWith("/resume") || pathname === "/courses"
+                      ? "w-full"
+                      : "w-0"
+                  }
+                `}
+              />
             </Link>
 
             <Link
@@ -129,7 +172,7 @@ export default function Navbar() {
             {["contact", "projects", "resume"].map((item) => (
               <Link
                 key={item}
-                href={`#${item}`}
+                href={`/${item}`}
                 className="hover:text-white/70 transition"
                 onClick={() => {
                   setIsClosing(true);
