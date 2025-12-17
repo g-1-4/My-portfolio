@@ -99,7 +99,7 @@ export default function CoursesPage() {
               hover:bg-white hover:text-indigo-600
             "
           >
-            ← Back to Resume
+            Back to Resume
           </Link>
         </div>
       </section>

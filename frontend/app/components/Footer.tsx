@@ -17,7 +17,12 @@ export default function Footer() {
             allowFullScreen
           ></iframe>
         </div>
-
+        <p className="mt-6 italic text-base leading-relaxed">
+          “When faced with two choices, simply toss a coin. It works not because
+          it settles the question for you, but because in that brief moment when
+          the coin is in the air, you suddenly know what you are hoping for.”
+        </p>
+        <p className="mt-2 text-sm opacity-80">— Author Unknown</p>
         <p className="mt-6 text-sm opacity-90">
           © {new Date().getFullYear()} Gowtham Sriram Arepalli. All rights
           reserved.

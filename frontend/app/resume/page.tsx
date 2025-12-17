@@ -169,7 +169,7 @@ export default function ResumePage() {
                 </div>
               </div>
 
-              <p className="font-semibold mt-4">Tools & Frameworks</p>
+              <p className="font-semibold mt-4">Tools</p>
               <div className="flex flex-wrap gap-4 items-center mt-3">
                 <div className="flex flex-col items-center text-sm">
                   <img

@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Linkedin, Github, Send, CheckCircle2 } from "lucide-react";
+import {
+  Mail,
+  Linkedin,
+  Github,
+  Send,
+  CheckCircle2,
+  XCircle,
+} from "lucide-react";
 
 type Errors = {
   firstName?: string;
@@ -54,10 +61,10 @@ export default function ContactPage() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setMessage(null);
+    setSuccess(null);
 
     const formData = new FormData(e.currentTarget);
     const payload = Object.fromEntries(formData);
-
     const validationErrors = validateForm(payload);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -68,29 +75,50 @@ export default function ContactPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch("http://localhost:5000/submit-contact", {
         method: "POST",
         body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       const data = await res.json();
 
-      if (data.success) {
+      if (res.ok && data.success) {
         setSuccess(true);
-        setMessage("Message sent successfully. I’ll get back to you shortly.");
-        e.currentTarget.reset();
+        setMessage(
+          data.message ||
+            "Thanks for reaching out! Your message has been sent successfully."
+        );
+        setMessageText("");
+        if (e.currentTarget) {
+          e.currentTarget.reset();
+        }
 
         setTimeout(() => {
           setMessage(null);
+          setSuccess(null);
         }, 5000);
       } else {
         setSuccess(false);
-        setMessage("Something went wrong while sending your message.");
+        setMessage(
+          data.message ||
+            "Something went wrong while sending your message. Please try again."
+        );
       }
-    } catch {
+    } catch (error) {
       setSuccess(false);
-      setMessage("Unable to connect right now. Please try again later.");
+
+      if (error instanceof TypeError) {
+        setMessage(
+          "Unable to connect to the server right now. Please try again shortly."
+        );
+      } else if (error instanceof SyntaxError) {
+        setMessage("Unexpected error occurred. Please try again later.");
+      } else {
+        setMessage("Unable to send message. Please try again later.");
+      }
     } finally {
       setLoading(false);
     }
@@ -159,7 +187,7 @@ export default function ContactPage() {
                     className="input"
                   />
                   {errors.firstName && (
-                    <p className="text-sm text-red-300 mt-1">
+                    <p className="text-sm text-red-600 mt-1">
                       {errors.firstName}
                     </p>
                   )}
@@ -172,7 +200,7 @@ export default function ContactPage() {
                     className="input"
                   />
                   {errors.lastName && (
-                    <p className="text-sm text-red-300 mt-1">
+                    <p className="text-sm text-red-600 mt-1">
                       {errors.lastName}
                     </p>
                   )}
@@ -189,7 +217,7 @@ export default function ContactPage() {
                 className="input mt-2"
               />
               {errors.email && (
-                <p className="text-sm text-red-300 mt-1">{errors.email}</p>
+                <p className="text-sm text-red-600 mt-1">{errors.email}</p>
               )}
             </div>
 
@@ -206,7 +234,7 @@ export default function ContactPage() {
               />
 
               <div className="flex justify-between items-center text-sm mt-1">
-                <span className="text-red-300">{errors.message}</span>
+                <span className="text-red-600">{errors.message}</span>
 
                 <span
                   className={`transition ${
@@ -225,15 +253,22 @@ export default function ContactPage() {
             {/* FEEDBACK */}
             {message && (
               <div
-                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${
-                  success
-                    ? "bg-green-400/10 text-green-200"
-                    : "bg-red-400/10 text-red-200"
-                }`}
+                className={`flex items-start gap-3 rounded-xl px-5 py-4 text-base font-medium
+                  ${
+                    success
+                      ? "bg-emerald-500/20 text-emerald-600 border border-emerald-400/30"
+                      : "bg-red-500/20 text-red-600 border border-red-400/30"
+                  }
+               `}
                 role="alert"
               >
-                {success && <CheckCircle2 size={18} className="opacity-80" />}
-                <span>{message}</span>
+                {success ? (
+                  <CheckCircle2 size={22} className="mt-0.5 shrink-0" />
+                ) : (
+                  <XCircle size={22} className="mt-0.5 shrink-0" />
+                )}
+
+                <span className="leading-relaxed">{message}</span>
               </div>
             )}
 
@@ -241,29 +276,34 @@ export default function ContactPage() {
             <button
               type="submit"
               disabled={loading}
-              className="
+              className={`
                 w-full
-                bg-white text-indigo-600
                 font-semibold text-lg
                 py-3.5 rounded-lg
-                cursor-pointer
-                transition-all
-                hover:bg-white/90 hover:shadow-lg
-                active:scale-[0.98]
-                disabled:opacity-60
-                disabled:cursor-not-allowed
                 flex items-center justify-center gap-2
-              "
+                transition-all duration-200 ease-out
+                cursor-pointer
+
+                ${
+                  loading
+                    ? "bg-indigo-600 text-white cursor-not-allowed"
+                    : "bg-white text-indigo-600 hover:bg-indigo-600 hover:text-white"
+                }
+
+                hover:shadow-lg
+                active:scale-[0.96]
+                disabled:opacity-60
+        `}
             >
               {loading ? (
                 <>
-                  <span className="inline-block w-5 h-5 border-2 border-indigo-600/30 border-t-indigo-600 rounded-full animate-spin"></span>
+                  <span className="inline-block w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
                   Sending...
                 </>
               ) : (
                 <>
                   Send Message
-                  <Send size={18} />
+                  <Send size={18} className="transition-colors duration-200" />
                 </>
               )}
             </button>

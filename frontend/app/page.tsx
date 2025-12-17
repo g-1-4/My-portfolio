@@ -77,8 +77,9 @@ export default function Home() {
           interest in web development, data analysis, and emerging technologies.
           I’ve explored research at NIT Warangal, contributed to university
           clubs, and built projects using Python, JavaScript, and modern web
-          frameworks. Outside academics, I enjoy football, cricket, and
-          following global geopolitics.
+          frameworks. Outside academics, I can speak 3 languages (Telugu,
+          English, Hindi). I enjoy football, cricket, and following global
+          geopolitics.
         </p>
       </section>
 
@@ -105,8 +106,6 @@ export default function Home() {
             shadow-lg
             transition-all duration-300
             hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl
-
-            md:-mt-12 lg:-mt-16
           "
         />
 
