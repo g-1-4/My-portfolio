@@ -75,7 +75,7 @@ export default function ContactPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/submit-contact", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
